@@ -20,5 +20,9 @@ def receber_webhook():
         print("Erro:", str(e))
         return jsonify({"status": "erro", "mensagem": str(e)}), 500
 
+@app.route("/", methods=["GET"])
+def keep_alive():
+    return "Online", 200
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)
