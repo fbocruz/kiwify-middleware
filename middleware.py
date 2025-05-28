@@ -1,15 +1,15 @@
 from flask import Flask, request, jsonify
 import requests
 import gspread
-from oauth2client.service_account import ServiceAccountCredentials
+from google.oauth2.service_account import Credentials
 
 app = Flask(__name__)
 
 GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxmfWvmh1cKBt02UOBR5Ax_R624PgIlzhuxVh5yLaIWfmZfu3NYrT-RM-dIlKX6J_Mtrw/exec"
 
 # 🔐 Autenticação com Google Sheets
-scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-creds = ServiceAccountCredentials.from_json_keyfile_name("credenciais.json", scope)
+scope = ['https://www.googleapis.com/auth/spreadsheets']
+creds = Credentials.from_service_account_file('credenciais.json', scopes=scope)
 client = gspread.authorize(creds)
 
 # 🗂 Nome da planilha e aba
