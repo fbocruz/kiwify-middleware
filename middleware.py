@@ -12,7 +12,7 @@ GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxmfWvmh1cKBt02UOBR
 
 # 🔐 Autenticação com Google Sheets via variável de ambiente
 scope = ['https://www.googleapis.com/auth/spreadsheets']
-credenciais_json = os.getenv("credenciais.json")
+credenciais_json = os.getenv("CREDENCIAIS_JSON")
 creds_dict = json.loads(credenciais_json)
 creds = Credentials.from_service_account_info(creds_dict, scopes=scope)
 client = gspread.authorize(creds)
