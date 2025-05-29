@@ -60,23 +60,36 @@ def vincular_nome():
     try:
         username = request.json.get("username")
         nome = request.json.get("nome")
-
-        if not username or not nome:
-            return jsonify({"erro": "username ou nome não informados"}), 400
+        email = request.json.get("email")
 
         sheet = client.open(NOME_PLANILHA).worksheet(ABA)
         dados = sheet.get_all_values()
 
-        for i, row in enumerate(dados[1:], start=2):  # Ignora cabeçalho
+        if email:  # 🆕 Tratamento por e-mail
+            for i, row in enumerate(dados[1:], start=2):  # Ignora cabeçalho
+                if row[0].strip().lower() == email.strip().lower():
+                    nome_usuario = row[7] or "Assinante"
+                    sheet.update_cell(i, 6, "TRUE")      # assinatura_ativa
+                    sheet.update_cell(i, 7, username)    # username
+                    sheet.update_cell(i, 8, nome_usuario)  # nome_usuario
+                    return jsonify({"vinculado": True, "nome": nome_usuario}), 200
+            return jsonify({"vinculado": False}), 404
+
+        if not username or not nome:
+            return jsonify({"erro": "username ou nome não informados"}), 400
+
+        # Lógica anterior (por nome)
+        for i, row in enumerate(dados[1:], start=2):
             if row[0] == "":
                 continue
             if row[0] == username or row[6] == username:
-                sheet.update_cell(i, 6, "TRUE")  # assinatura_ativa
+                sheet.update_cell(i, 6, "TRUE")
                 sheet.update_cell(i, 7, username)
                 sheet.update_cell(i, 8, nome)
                 return jsonify({"status": "atualizado"}), 200
 
         return jsonify({"status": "nao_encontrado"}), 404
+
     except Exception as e:
         print("Erro no vínculo:", str(e))
         return jsonify({"erro": str(e)}), 500
