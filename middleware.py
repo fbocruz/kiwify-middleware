@@ -11,7 +11,7 @@ app = Flask(__name__)
 GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxmfWvmh1cKBt02UOBR5Ax_R624PgIlzhuxVh5yLaIWfmZfu3NYrT-RM-dIlKX6J_Mtrw/exec"
 
 # 🔐 Autenticação com Google Sheets via variável de ambiente
-scope = ['https://www.googleapis.com/auth/spreadsheets']
+scope = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive']
 credenciais_json = os.getenv("CREDENCIAIS_JSON")
 creds_dict = json.loads(credenciais_json)
 creds = Credentials.from_service_account_info(creds_dict, scopes=scope)
@@ -68,8 +68,8 @@ def vincular_nome():
         dados = sheet.get_all_values()
 
         if email:  # 🆕 Tratamento por e-mail
-            for i, row in enumerate(dados[1:], start=2):  # Ignora cabeçalho
-                if row[0].strip().lower() == email.strip().lower():
+            for i, row in enumerate(dados[1:], start=2):  # começa da linha 2
+              if len(row) > 0 and row[0].strip().lower() == email.strip().lower():
                     nome_usuario = row[7] or "Assinante"
                     sheet.update_cell(i, 6, "TRUE")      # assinatura_ativa
                     sheet.update_cell(i, 7, username)    # username
