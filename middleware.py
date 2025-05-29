@@ -61,14 +61,13 @@ def vincular_nome():
         username = request.json.get("username")
         nome = request.json.get("nome")
         email = request.json.get("email")
-        print(username)
-        print(nome)
-        print(email)
+        
         sheet = client.open(NOME_PLANILHA).worksheet(ABA)
         dados = sheet.get_all_values()
 
         if email:  # 🆕 Tratamento por e-mail
             for i, row in enumerate(dados[1:], start=2):  # começa da linha 2
+              print(f"{row[0].strip().lower()} = {email.strip().lower()}")  
               if len(row) > 0 and row[0].strip().lower() == email.strip().lower():
                     nome_usuario = row[7] or "Assinante"
                     sheet.update_cell(i, 6, "TRUE")      # assinatura_ativa
