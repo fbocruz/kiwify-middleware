@@ -94,6 +94,7 @@ def vincular_nome():
         print("Erro no vínculo:", str(e))
         return jsonify({"erro": str(e)}), 500
 
+
 @app.route("/", methods=["GET"])
 def keep_alive():
     return "Online", 200
