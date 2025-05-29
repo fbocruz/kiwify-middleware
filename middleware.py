@@ -61,7 +61,9 @@ def vincular_nome():
         username = request.json.get("username")
         nome = request.json.get("nome")
         email = request.json.get("email")
-
+        print(username)
+        print(nome)
+        print(email)
         sheet = client.open(NOME_PLANILHA).worksheet(ABA)
         dados = sheet.get_all_values()
 
