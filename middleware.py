@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from unicodedata import normalize
 import requests
 import gspread
 from google.oauth2.service_account import Credentials
@@ -55,6 +56,11 @@ def verificar_assinante():
         print("Erro na verificação:", str(e))
         return jsonify({"erro": str(e)}), 500
 
+def limpar(texto):
+    if not texto:
+        return ""
+    return normalize("NFKD", texto).encode("ascii", "ignore").decode("utf-8").strip().lower()
+
 @app.route("/vincular_nome", methods=["POST"])
 def vincular_nome():
     try:
@@ -68,7 +74,7 @@ def vincular_nome():
         if email:  # 🆕 Tratamento por e-mail
           for i, row in enumerate(dados[1:], start=2):  # começa da linha 2
             print(f"{row[0].strip().lower()} = {email.strip().lower()}")
-            if len(row) > 0 and row[0].strip().lower() == email.strip().lower():
+            if len(row) > 0 and limpar(row[0]) == limpar(email):
               nome_usuario = nome or row[7] or "Assinante"
               sheet.update_cell(i, 6, "TRUE")        # Coluna F - assinatura_ativa
               sheet.update_cell(i, 7, username)      # Coluna G - username
