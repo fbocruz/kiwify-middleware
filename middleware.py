@@ -106,5 +106,22 @@ def vincular_nome():
 def keep_alive():
     return "Online", 200
 
+@app.route("/verificar_email", methods=["POST"])
+def verificar_por_email():
+    try:
+        email = request.json.get("email")
+        sheet = client.open(NOME_PLANILHA).worksheet(ABA)
+        dados = sheet.get_all_records()
+        for row in dados:
+            if row.get("email", "").strip().lower() == email.strip().lower():
+                return jsonify({
+                    "assinatura_ativa": row.get("assinatura_ativa", "").upper() == "TRUE",
+                    "nome": row.get("nome") or row.get("nome_usuario", "")
+                }), 200
+        return jsonify({"assinatura_ativa": False}), 200
+    except Exception as e:
+        print("Erro na verificação de e-mail:", e)
+        return jsonify({"erro": str(e)}), 500
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)
