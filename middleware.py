@@ -66,14 +66,14 @@ def vincular_nome():
         dados = sheet.get_all_values()
 
         if email:  # 🆕 Tratamento por e-mail
-            for i, row in enumerate(dados[1:], start=2):  # começa da linha 2
-              print(f"{row[0].strip().lower()} = {email.strip().lower()}")  
-              if len(row) > 0 and row[0].strip().lower() == email.strip().lower():
-                    nome_usuario = row[7] or "Assinante"
-                    sheet.update_cell(i, 6, "TRUE")      # assinatura_ativa
-                    sheet.update_cell(i, 7, username)    # username
-                    sheet.update_cell(i, 8, nome_usuario)  # nome_usuario
-                    return jsonify({"vinculado": True, "nome": nome_usuario}), 200
+          for i, row in enumerate(dados[1:], start=2):  # começa da linha 2
+            print(f"{row[0].strip().lower()} = {email.strip().lower()}")
+            if len(row) > 0 and row[0].strip().lower() == email.strip().lower():
+              nome_usuario = nome or row[7] or "Assinante"
+              sheet.update_cell(i, 6, "TRUE")        # Coluna F - assinatura_ativa
+              sheet.update_cell(i, 7, username)      # Coluna G - username
+              sheet.update_cell(i, 8, nome_usuario)  # Coluna H - nome_usuario
+              return jsonify({"vinculado": True, "nome": nome_usuario}), 200
             return jsonify({"vinculado": False}), 404
 
         if not username or not nome:
