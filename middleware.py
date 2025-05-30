@@ -80,7 +80,7 @@ def vincular_nome():
               sheet.update_cell(i, 7, username)      # Coluna G - username
               sheet.update_cell(i, 8, nome_usuario)  # Coluna H - nome_usuario
               return jsonify({"vinculado": True, "nome": nome_usuario}), 200
-            return jsonify({"vinculado": False}), 404
+          return jsonify({"vinculado": False}), 404
 
         if not username or not nome:
             return jsonify({"erro": "username ou nome não informados"}), 400
