@@ -73,7 +73,7 @@ def vincular_nome():
 
         if email:  # 🆕 Tratamento por e-mail
           for i, row in enumerate(dados[1:], start=2):  # começa da linha 2
-            print(f"{row[0].strip().lower()} = {email.strip().lower()}")
+            print(f"Verificando linha {i}: {row}")
             if len(row) > 0 and limpar(row[0]) == limpar(email):
               nome_usuario = nome or row[7] or "Assinante"
               sheet.update_cell(i, 6, "TRUE")        # Coluna F - assinatura_ativa
